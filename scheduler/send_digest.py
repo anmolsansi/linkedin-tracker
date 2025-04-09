@@ -36,7 +36,7 @@ for i, row in enumerate(records, start=2):  # row 1 is header
 
 # Prepare HTML Email
 if digest:
-    with open("email_template.html") as f:
+    with open("scheduler/email_template.html") as f:
         template = Template(f.read())
         html = template.render(requests=digest)
 

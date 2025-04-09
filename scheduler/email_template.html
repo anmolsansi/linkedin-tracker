@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>📋 LinkedIn Follow-Up Summary</h2>
+    <ul>
+      {% for item in requests %}
+        <li>
+          <strong>{{ item.company }}</strong><br>
+          Sent: {{ item.total }} | Accepted: {{ item.accepted }}<br>
+          {% if item.refer_ready > 0 %}
+            ✅ {{ item.refer_ready }} ready for referral
+          {% elif item.accepted > 0 %}
+            ⚠️ Some accepted – check if they can refer
+          {% else %}
+            ❗ No responses – consider applying directly
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

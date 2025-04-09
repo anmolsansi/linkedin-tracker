@@ -1,0 +1,28 @@
+name: Daily Digest Email
+
+on:
+  schedule:
+    - cron: "0 9 * * *"  # 9 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install gspread oauth2client requests python-dotenv jinja2
+
+      - name: Run script
+        env:
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          MY_EMAIL: ${{ secrets.MY_EMAIL }}
+        run: python scheduler/send_digest.py

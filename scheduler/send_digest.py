@@ -11,7 +11,8 @@ load_dotenv()
 
 # Setup Google Sheets
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name(os.getenv("GOOGLE_CREDENTIALS_JSON_PATH"), scope)
+# creds = ServiceAccountCredentials.from_json_keyfile_name(os.getenv("GOOGLE_CREDENTIALS_JSON_PATH"), scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("scheduler/creds.json", scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(os.getenv("GOOGLE_SHEET_ID")).sheet1
 records = sheet.get_all_records()

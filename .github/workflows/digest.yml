@@ -1,15 +1,16 @@
-name: Daily Digest Email
+name: 📬 Send Daily LinkedIn Digest
 
 on:
   schedule:
-    - cron: "0 9 * * *"  # 9 AM UTC daily
-  workflow_dispatch:
+    - cron: '0 9 * * *' # Runs daily at 9 AM UTC
+  workflow_dispatch: # Allows manual run
 
 jobs:
-  run-script:
+  send-digest:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -18,9 +19,14 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install gspread oauth2client requests python-dotenv jinja2
+        run: |
+          pip install gspread oauth2client requests python-dotenv jinja2
 
-      - name: Run script
+      - name: Reconstruct creds.json from secret
+        run: |
+          echo "${{ secrets.GOOGLE_CREDS_JSON_BASE64 }}" | base64 --decode > scheduler/creds.json
+
+      - name: Run digest script
         env:
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
